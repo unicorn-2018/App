@@ -1,0 +1,144 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Bizcalendar</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/locale/ja.js" integrity="sha256-LgbT9arTxUvmvXEAEK6+gZY0fveTqT7zvB5mpLuXOXs=" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div th:replace="/common/Common.html::header"></div> <br>
+  <div class="container-fluid">
+    <div th:fragment="replace">
+      <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <div class="alert alert-success" role="alert">This is a success alert—check it out!</div>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	          </button>
+	        </div>
+            <div class="modal-body">
+              <div class="calendaraddwidth">
+                <div class="calendaraddcontainer"> <input id="eventId" type="hidden"> <input id="operation" type="hidden">
+                  <form id="sampleForm" class="needs-validation" onsubmit="return false" novalidate >
+                    <div class="form-row">
+                      <div class="col-md-12"> <label for="validationCustom01">名前</label> <input type="text" class="form-control" id="inputName" placeholder="名前" name="familyName" value="" required>
+                        <div class="invalid-feedback"> 名前を入力してください </div>
+                      </div>
+                      <div class="col-md-12"> <label for="validationCustom02">タイトル</label> <input type="text" class="form-control" id="inputTitle" placeholder="タイトル" name="firstName" value="" required>
+                        <div class="invalid-feedback"> タイトルを入力してください </div>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="col-md-12"> <label for="validationCustom03">コメント</label> <textarea class="form-control" id="inputContent" rows="3" placeholder="コメント" wrap="soft" required></textarea>
+                        <div class="invalid-feedback"> コメントを入力してください </div>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="col-md-6 mb-3"> <label for="validationCustomDateStart01">開始日</label> <input type="date" class="form-control" id="inputYmdFrom" name="startDate01" placeholder="開始日" oninput="isValidDates();" required>
+                        <div class="invalid-feedback"> 開始日を入力してください </div>
+                      </div>
+                      <div class="col-md-6 mb-3"> <label for="validationCustomDateEnd01">終了日</label> <input type="date" class="form-control" id="inputYmdTo" name="endDate01" placeholder="終了日" oninput="isValidDates();" required>
+                        <div class="invalid-feedback"> 終了日が正しくありません </div>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="col-md-6 mb-3"> <label for="validationCustomDateStart02">開始時間</label> <input type="time" class="form-control" id="inputHmFrom" name="startDate02" placeholder="開始時間" oninput="isValidDates();" required>
+                        <div class="invalid-feedback"> 開始時間を入力してください </div>
+                      </div>
+                      <div class="col-md-6 mb-3"> <label for="validationCustomDateEnd02">終了時間</label> <input type="time" class="form-control" id="inputHmTo" name="endDate02" placeholder="終了時間" oninput="isValidDates();" required>
+                        <div class="invalid-feedback"> 終了時間が正しくありません </div>
+                      </div>
+                    </div>
+                    <div class="form-group"> <label for="">状況</label>
+                      <div class="form-check">
+                        <div class="custom-control custom-radio custom-control-inline"> <input type="radio" id="customRadioInline1" name="customRadioInline1" class="custom-control-input" value="1" required> <label class="custom-control-label" for="customRadioInline1">Metting</label> </div>
+                        <div class="custom-control custom-radio custom-control-inline"> <input type="radio" id="customRadioInline2" name="customRadioInline1" class="custom-control-input" value="2" required> <label class="custom-control-label" for="customRadioInline2">Enjoy</label> </div>
+                        <div class="custom-control custom-radio custom-control-inline"> <input type="radio" id="customRadioInline3" name="customRadioInline1" class="custom-control-input" value="3" required> <label class="custom-control-label" for="customRadioInline3">Event</label> </div>
+                        <div class="custom-control custom-radio custom-control-inline"> <input type="radio" id="customRadioInline4" name="customRadioInline1" class="custom-control-input" value="4" required> <label class="custom-control-label" for="customRadioInline4">Todo</label> </div>
+                      </div>
+                    </div>
+                    <div class="form-group"> <label for="">種類</label>
+                      <div class="form-check">
+                        <div class="custom-control custom-radio"> <input id="customRadio1" name="customRadio" type="radio" class="custom-control-input" value="1" required> <label class="custom-control-label" for="customRadio1">Public</label> </div>
+                        <div class="custom-control custom-radio"> <input id="customRadio2" name="customRadio" type="radio" class="custom-control-input" value="2" required> <label class="custom-control-label" for="customRadio2">Private</label> </div>
+                        <div class="custom-control custom-radio"> <input id="customRadio3" name="customRadio" type="radio" class="custom-control-input" value="3" required> <label class="custom-control-label" for="customRadio3">Team</label> </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+	                    <button type="submit" id="registButton" class="btn btn-outline btn-lg font-weight-bold calendarconfirmbackbutton calendarconfirmsquare_btn" >Apply</button>
+	                    <button type="submit" id="updateButton" class="btn btn-outline btn-lg font-weight-bold calendarconfirmbackbutton calendarconfirmsquare_btn" >Update</button>
+	                    <button type="submit" id="deleteButton" class="btn btn-outline btn-lg font-weight-bold calendarconfirmbackbutton calendarconfirmsquare_btn" data-dismiss="modal">Back</button>
+                    </div>
+                  </form>
+                </div>
+                <script type="text/javascript">
+                 // 無効なフィールドがある場合にフォーム送信を無効にするスターターJavaScriptの例
+				(function() {
+				  'use strict';
+				  window.addEventListener('load', function() {
+				    // カスタムブートストラップ検証スタイルを適用するすべてのフォームを取得
+				    var forms = document.getElementsByClassName('needs-validation');
+				    // ループして帰順を防ぐ
+				    var validation = Array.prototype.filter.call(forms, function(form) {
+				      form.addEventListener('submit', function(event) {
+				        if (form.checkValidity() === false) {
+				          event.preventDefault();
+				          event.stopPropagation();
+				        }else{
+				        	if($('#operation').val() === "update"){
+				        		updateSchedule();
+				        	}else{
+				        		registSchedule();
+				        	}
+				        	$('#addModal').modal('hide');
+				        }
+				        form.classList.add('was-validated');
+				      }, false);
+				      // 有効な値になるまでボタンが活性化されない
+				      //form.addEventListener('input', function(event) {
+				      //  $(this).find(':submit').attr('disabled', !this.checkValidity());
+				      //});
+				    });
+				  }, false);
+				})();
+
+				function isValidDates() {
+					var inputCustomDateEnd = document.getElementById("inputYmdTo");
+					var inputCustomDateEnd02 = document.getElementById("inputHmTo");
+					inputCustomDateEnd.setCustomValidity("");
+					inputCustomDateEnd02.setCustomValidity("");
+
+					var startDate = new Date($("#inputYmdFrom").val());
+					var endDateValue = $("#inputYmdTo").val();
+					var endDate = new Date(endDateValue);
+
+					var date3 = new Date($('#inputYmdFrom').val() + " "+ $('#inputHmFrom').val()); //時刻 from
+					var date4 = new Date($('#inputYmdTo').val() + " "+ $('#inputHmTo').val()); //時刻 from
+
+				   if (endDate < startDate) {
+				      inputCustomDateEnd.setCustomValidity("終了日が正しくありません");
+				      return false;
+				   }
+
+				   if(date4 < date3 || new Date(date4).getTime() === new Date(date3).getTime()) {
+				   	 inputCustomDateEnd02.setCustomValidity("終了時間が正しくありません");
+				     return false;
+				   }
+				   return true;
+				}
+                </script>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

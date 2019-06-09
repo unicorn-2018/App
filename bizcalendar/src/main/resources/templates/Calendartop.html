@@ -1,0 +1,30 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Bizcalendar</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+</head>
+<body>
+<div th:replace="/common/Common.html::header"></div>
+<br>
+<div class="container-fluid">
+	<div class="text-center font-weight-bold calendartoptitle">Biz Refine</div>
+	<div class="text-center calendartopday" th:text="${title}"></div>
+	<div class="calendartopwidth">
+		<div class="calendartopcontainer">
+			<div id="contents">
+				<form action="#" th:action="@{/login}" th:object="${user}" method=POST>
+					<input type="text" th:field="*{userEmail}" class="calendartopmailaddress" placeholder="mail address"/>
+					<br>
+					<input type="password" th:field="*{userPass}" class="calendartoppassword" placeholder="Password"/>
+					<br>
+					<input type="submit" class="text-center btn btn-outline btn-lg font-weight-bold calendartopbutton"  value="Log&nbsp;&nbsp;in" />
+				</form>
+				<span th:text="${message}"></span>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

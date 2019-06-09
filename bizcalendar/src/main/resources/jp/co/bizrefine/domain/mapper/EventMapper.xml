@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="jp.co.bizrefine.domain.mapper.EventMapper">
+   <select id="findEvents" parameterType="jp.co.bizrefine.domain.model.Event" resultType="jp.co.bizrefine.domain.model.Event">
+      SELECT
+      	et.event_id         AS "id"
+       ,ut.name             AS "name"
+	   ,et.event_name       AS "title"
+	   ,et.event_start      AS "start"
+	   ,et.event_end        AS "end"
+	   ,et.description      AS "description"
+	   ,et.event_type_id    AS "className"
+	   ,et.event_status_id  AS "statusName"
+	   ,1                   AS "eventVaildF"
+      FROM
+      	event_tb et
+      INNER JOIN user_tb ut ON
+	  	ut.user_id = et.user_id
+      	<where>
+      		<if test="id != 0">
+      			et.event_id = #{id}
+      		</if>
+      		<if test="userId != 0">
+      			and et.user_id = #{userId}
+      		</if>
+      		<if test="className != 0 and className != 4">
+      			and et.event_type_id = #{className}
+      		</if>
+	        	and et.event_vaild_f = 1
+	    </where>
+   </select>
+   <insert id="saveEvent" useGeneratedKeys="true" keyProperty="id" parameterType="jp.co.bizrefine.domain.model.Event">
+     INSERT INTO event_tb (
+     	 event_id
+	    ,event_name
+	    ,event_start
+	    ,event_end
+	    ,description
+	    ,event_type_id
+     ) VALUES (
+     	 #{id}
+     	,#{title}
+     	,#{start}
+     	,#{end}
+     	,#{description}
+     	,#{className}
+     )
+   </insert>
+   <update id="updateEvent" parameterType="jp.co.bizrefine.domain.model.Event">
+     UPDATE event_tb set
+	     event_name  = #{title}
+	    ,event_start = #{start}
+	    ,event_end   = #{end}
+		,description = #{description}
+		,event_type_id = #{className}
+     WHERE
+     	event_id = #{id}
+   </update>
+   <delete id="deleteEvent" parameterType="int">
+     DELETE FROM event_tb
+     WHERE
+     	event_id = #{id}
+   </delete>
+   <select id="findResources" parameterType="jp.co.bizrefine.domain.model.Event" resultType="jp.co.bizrefine.domain.model.Resource">
+      SELECT DISTINCT
+      	CASE WHEN et.event_type_id = 1 THEN ett.event_type_name
+      	     WHEN et.event_type_id = 2 THEN gt.group_name
+      	     WHEN et.event_type_id = 3 THEN ut.name END AS "building"
+	   ,est.event_status_name                           AS "title"
+	   ,et.event_type_id                                AS "className"
+	   ,et.event_status_id                              AS "statusName"
+	   ,ett.event_type_color                            AS "eventColor"
+	   ,est.event_status_icon                           AS "statusIcon"
+	  FROM
+	  	event_tb et
+	  INNER JOIN event_type_tb ett ON
+	  	et.event_type_id = ett.event_type_id
+	  INNER JOIN event_status_tb est ON
+	  	et.event_status_id = est.event_status_id
+	  INNER JOIN user_tb ut ON
+	  	ut.user_id = et.user_id
+	  INNER JOIN group_tb gt ON
+	  	gt.group_id = ut.group_id3
+      <where>
+      	<if test="id != 0">
+      		et.event_id = #{id}
+      	</if>
+      	<if test="userId != 0">
+      		and et.user_id = #{userId}
+      	</if>
+      	<if test="className != 0 and className != 4">
+      		and et.event_type_id = #{className}
+      	</if>
+	        and et.event_vaild_f = 1
+	   </where>
+   </select>
+</mapper>

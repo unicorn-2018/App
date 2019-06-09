@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Bizcalendar</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link th:href="@{/dist/css/fullcalendar.min.css}" rel="stylesheet">
+	<link th:href="@{/dist/css/fullcalendar.print.min.css}" rel="stylesheet" media='print'>
+	<link th:href="@{/dist/css/scheduler.min.css}" rel="stylesheet">
+	<script th:src="@{/dist/js/moment.min.js}"></script>
+	<script th:src="@{/dist/js/jquery.min.js}"></script>
+	<script th:src="@{/dist/js/fullcalendar.min.js}"></script>
+	<script th:src="@{/dist/js/scheduler.min.js}"></script>
+	<script th:src="@{/js/Calendarmain.js}"></script>
+</head>
+<body>
+<div th:replace="/common/Common.html::header"></div>
+<div th:replace="/common/Header.html::header"></div>
+<br>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-12 col-md-12 col-lg-8">
+			<div id="calendar"></div>
+		</div>
+		<br>
+		<div class="col-12 col-md-12 col-lg-4">
+			<div class="list-group" id ="event-title">
+			    <div class="form-inline my-2 my-lg-0">
+					<input id="input-date" class="form-control mr-sm-2" type="date" placeholder="" aria-label="Search">
+					<button id= "search-button" class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+				</div>
+				<br>
+				<div class="accordion" id="accordion" role="tablist" aria-multiselectable="true" >
+				</div>
+				<br>
+			</div>
+		</div>
+	</div>
+</div>
+</body>
+</html>

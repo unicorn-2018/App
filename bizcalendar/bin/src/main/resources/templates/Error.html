@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Bizcalendar</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+</head>
+<body>
+<div th:replace="/common/Common.html::header"></div>
+<br>
+<div class="container-fluid">
+	<h5>エラーが発生しました。</h5>
+	   <p th:text="'【エラー内容】 ' + ${message}" />
+</div>
+</body>
+</html>
