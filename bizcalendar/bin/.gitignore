@@ -25,5 +25,9 @@
 /nbdist/
 /.nb-gradle/
 
-### log ƒtƒHƒ‹ƒ_“à•”
+
+### logFolder
 bizcalendar/logs/myapp.log*
+
+### propaties
+.propaties
