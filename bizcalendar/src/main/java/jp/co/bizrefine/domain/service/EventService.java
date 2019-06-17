@@ -32,6 +32,7 @@ public class EventService {
 		List<Resource> resources = findResources(event);
 		for (Event eventResult : events) {
 			for (Resource resource : resources) {
+				//状況かつ種類が同じなら
 				if (eventResult.getClassName() == resource.getClassName()
 						&& eventResult.getStatusName() == resource.getStatusName()) {
 					eventResult.setResourceId(resource.getId());

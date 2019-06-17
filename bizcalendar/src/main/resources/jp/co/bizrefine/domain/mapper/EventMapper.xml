@@ -20,9 +20,11 @@
       		<if test="id != 0">
       			et.event_id = #{id}
       		</if>
+  			<!-- userのイベントを取得 -->
       		<if test="userId != 0">
       			and et.user_id = #{userId}
       		</if>
+			<!-- 状況取得 -->
       		<if test="className != 0 and className != 4">
       			and et.event_type_id = #{className}
       		</if>
@@ -62,6 +64,7 @@
      	event_id = #{id}
    </delete>
    <select id="findResources" parameterType="jp.co.bizrefine.domain.model.Event" resultType="jp.co.bizrefine.domain.model.Resource">
+      <!-- 重複レコードをまとめる -->
       SELECT DISTINCT
       	CASE WHEN et.event_type_id = 1 THEN ett.event_type_name
       	     WHEN et.event_type_id = 2 THEN gt.group_name
