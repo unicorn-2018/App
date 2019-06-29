@@ -1,5 +1,7 @@
 package jp.co.bizrefine.domain.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,4 +31,13 @@ public class UserService {
 		return userResult;
 	}
 
+	/**
+	 *
+	 *
+	 *
+	 */
+	public List<User> members() {
+		List<User> membersResult = userMapper.members();
+		return membersResult;
+	}
 }

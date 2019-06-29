@@ -20,4 +20,13 @@
 	    user_pass = #{userPass} AND
 	    user_vaild_f = 1
    </select>
+      <select id="members" resultType="jp.co.bizrefine.domain.model.User" >
+      SELECT
+         user_id AS "userId"
+      	,name    AS "name"
+      FROM
+      	user_tb
+      WHERE
+	    user_vaild_f = 1
+   </select>
 </mapper>

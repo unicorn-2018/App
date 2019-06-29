@@ -28,11 +28,10 @@
 	            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 	              名前
 	            </a>
-	            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-	              <a class="dropdown-item" href="#">Action</a>
-	              <a class="dropdown-item" href="#">Another action</a>
-	              <div class="dropdown-divider"></div>
-	              <a class="dropdown-item" href="#">Something else here</a>
+	            <div class="dropdown-menu" aria-labelledby="dropdownMenu">
+	            	<button class="dropdown-item" type="button" th:each="member : ${members}" >
+	            		<span th:text="${member.name}" th:attr="onclick='memberSelect('+ ${member.userId}+');'" ></span>
+	            	</button>
 	            </div>
 	          </li>
 	          <li class="nav-item dropdown">

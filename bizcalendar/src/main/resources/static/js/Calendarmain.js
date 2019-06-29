@@ -1,7 +1,12 @@
 // 選択日付
 var day;
+
+//選択名前
+var selectMember="0"
+
 // 選択種別
 var selectType = "0";
+
 
 $(function() {$('#calendar').fullCalendar({
 	schedulerLicenseKey : 'GPL-My-Project-Is-Open-Source',
@@ -135,6 +140,7 @@ $(function() {$('#calendar').fullCalendar({
 /**
  * モーダル(編集画面)にイベントを渡す。
  */
+
 $(function() {
 	$('#addModal').on('shown.bs.modal', function(event) {
 		var button = $(event.relatedTarget) // モーダルを呼び出すときに使われたボタンを取得
@@ -184,7 +190,6 @@ $(function() {
 			$('#inputHmFrom').val("");
 			$('#inputHmTo').val("");
 			$('#inputContent').val("");
-
 		}
 	});
 });
@@ -200,6 +205,9 @@ function setCalendarList(startDate, endDate, callback) {
 		start : startDate,
 		className : selectType
 	};
+	if(selectMember !== "0"){
+		eventData["userId"] =  selectMember
+	}
 	$.ajax({
 		type : 'post',
 		dataType : 'text',
@@ -246,6 +254,9 @@ function setResourceList(startDate, endDate, callback) {
 		start : startDate,
 		className : selectType
 	};
+	if(selectMember !== "0"){
+		eventData["userId"] =  selectMember
+	}
 	$.ajax({
 		type : 'post',
 		dataType : 'text',
@@ -356,6 +367,14 @@ function deleteSchedule() {
 	}, function() {
 		alert("読み込み失敗");
 	});
+}
+
+/**
+ * 名前ボタンクリックイベント
+ */
+function memberSelect(value) {
+	selectMember = String(value);
+	refresh();
 }
 
 /**

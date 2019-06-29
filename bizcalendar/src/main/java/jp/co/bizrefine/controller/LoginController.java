@@ -1,6 +1,7 @@
 package jp.co.bizrefine.controller;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,9 +27,7 @@ public class LoginController {
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public ModelAndView toCalendartop() {
-
 		ModelAndView mv = new ModelAndView();
-
 		mv.setViewName("Calendartop");
 		mv.addObject("user", new User());
 		LocalDate date = LocalDate.now();
@@ -46,14 +45,18 @@ public class LoginController {
 	@PostMapping(value = "/login")
 	public ModelAndView toCalendarmain(@ModelAttribute User user) throws Exception {
 		ModelAndView mv = new ModelAndView();
+
 		//前処理から受け取ったUserクラスを認証する
 		User authedUser = userService.auth(user);
+		//メンバーの取得
+		List<User> membersList = userService.members();
 
 		if (authedUser != null) {
 			// 認証成功時、遷移先を変更する
 			mv.setViewName("Calendarmain");
 			// 認証成功時、遷移先へ認証済みUserを渡す
 			mv.addObject("user", authedUser);
+			mv.addObject("members", membersList);
 		} else {
 			mv.setViewName("Calendartop");
 			LocalDate date = LocalDate.now();
@@ -61,7 +64,6 @@ public class LoginController {
 			mv.addObject("title", title);
 			mv.addObject("message", "ユーザーID、またはパスワードが間違っています。");
 		}
-
 		return mv;
 	}
 
