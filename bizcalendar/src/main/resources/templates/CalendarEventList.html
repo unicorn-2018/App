@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+	<!-- 未使用 -->
+	<table class='table' id="event-table"  style="width:100%">
+		<thead>
+			<tr>
+				<th></th>
+				<th><small>開始</small></th>
+				<th><small>終了</small></th>
+				<th><small>内容</small></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="e:${events}">
+				<td class='details-control'></td>
+				<td>[[${#strings.substring(e.start,0,4)}]].[[${#strings.substring(e.start,5,7)}]].[[${#strings.substring(e.start,8,10)}]]
+					[[${#strings.substring(e.start,11,16)}]]</td>
+				<td>[[${#strings.substring(e.end,0,4)}]].[[${#strings.substring(e.end,5,7)}]].[[${#strings.substring(e.end,8,10)}]]
+					[[${#strings.substring(e.end,11,16)}]]</td>
+				<td>[[${e.title}]]</td>
+				<td>[[${e.id}]]</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

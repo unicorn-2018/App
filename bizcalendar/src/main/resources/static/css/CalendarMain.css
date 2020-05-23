@@ -1,0 +1,138 @@
+.fc-sun {
+	background-color: #ffeaea;
+}
+
+.fc-sat {
+	background-color: #eaffff;
+}
+
+.fc-widget-header {
+	background-color: white;
+}
+
+.fc-header-toolbar {
+	padding-top: 10px;
+	margin-bottom: 6px !important;
+}
+
+td.details-control {
+	text-align: center;
+	width: 5%;
+	min-width: 5%;
+	max-width: 5%;
+}
+
+td.details-control:before {
+	font-family: "Font Awesome 5 Free";
+	content: "\f0fe";
+	font-weight: 900;
+	padding: 0px;
+	color: #f67280;
+}
+
+tr.shown td.details-control:before {
+	font-family: "Font Awesome 5 Free";
+	content: "\f146";
+	font-weight: 900;
+	padding-left: 0px;
+	color: #36b5b0;
+}
+
+/*-- 簡易表示 --*/
+@media screen and (max-width: 480px) {
+	.fc-event {
+		font-size: 10px;
+	}
+	.fc-day-number {
+		font-size: 20px;
+	}
+	.fc-scroller-canvas {
+		font-size: 14px;
+	}
+	.fc-header-toolbar {
+		position: -webkit-sticky;
+		position: sticky;
+		top: 0px;
+		z-index: 9;
+		background-color: white;
+	}
+	.fc-head {
+		position: -webkit-sticky;
+		position: sticky;
+		z-index: 10;
+		background-color: #e9e9e9;
+	}
+	.fc-cell-text {
+		white-space: normal !important;
+		word-wrap: break-word !important;
+	}
+}
+
+.menu-trigger {
+	display: inline-block;
+	width: 36px;
+	height: 28px;
+	vertical-align: middle;
+	cursor: pointer;
+	position: fixed;
+	right: 30px;
+	bottom: 30px;
+	z-index: 100;
+}
+
+.menu-trigger span {
+	display: inline-block;
+	box-sizing: border-box;
+	position: absolute;
+	left: 0;
+	width: 100%;
+	height: 4px;
+	background-color: #000;
+	transition: all .5s;
+}
+
+.menu-trigger.active span {
+	background-color: #fff;
+}
+
+.menu-trigger span:nth-of-type(1) {
+	top: 0;
+}
+
+.menu-trigger.active span:nth-of-type(1) {
+	transform: translateY(12px) rotate(-45deg);
+}
+
+.menu-trigger span:nth-of-type(2) {
+	top: 12px;
+}
+
+.menu-trigger.active span:nth-of-type(2) {
+	opacity: 0;
+}
+
+.menu-trigger span:nth-of-type(3) {
+	bottom: 0;
+}
+
+.menu-trigger.active span:nth-of-type(3) {
+	transform: translateY(-12px) rotate(45deg);
+}
+
+nav {
+	width: 300px;
+	height: 100%;
+	background-color: rgb(16, 69, 153, 0.8);
+	position: fixed;
+	top: 0;
+	right: 0;
+	z-index: 10;
+	transform: translate(300px);
+	transition: all .5s;
+	padding: 10px;
+	overflow: auto;
+}
+
+nav.open {
+	transform: translateZ(0);
+}

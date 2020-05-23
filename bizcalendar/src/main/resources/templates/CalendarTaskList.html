@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+  	<table class="table" id="task-table" style="width:100%">
+		<thead>
+			<tr>
+				<th></th>
+				<th><small>状況</small></th>
+				<th><small>期限</small></th>
+				<th><small>タイトル</small></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="e:${tasks}">
+				<td class='details-control'></td>
+				<td th:if="${e.taskStatusName!=null}"><h6><span class="badge badge-secondary">[[${e.taskStatusName}]]</span></h6></td>
+				<td th:if="${e.taskStatusName==null}"><h6><span class="badge badge-secondary">未設定</span></h6></td>
+				<td th:if="${e.taskKigenFlag}"><span style="color:red">[[${#strings.replace(#strings.substring(e.start,0,10), '-', '.')}]]</span></td>
+				<td th:if="${e.taskKigenFlag}"><span style="color:red">[[${e.title}]]</span></td>
+				<td th:unless="${e.taskKigenFlag}">[[${#strings.replace(#strings.substring(e.start,0,10), '-', '.')}]]</td>
+				<td th:unless="${e.taskKigenFlag}">[[${e.title}]]</td>
+				<td>[[${e.id}]]</td>
+				<td>[[${e.title}]]</td>
+				<td>[[${e.start}]]</td>
+				<td>[[${e.description}]]</td>
+				<td>[[${e.taskStatusId}]]</td>
+				<td>[[${e.taskStatusName}]]</td>
+				<td>[[${e.taskKigenFlag}]]</td>
+				<td>[[${e.editAuthFlag}]]</td>
+				<td>[[${e.eventTypeId}]]</td>
+				<td>[[${e.eventTypeColor}]]</td>
+				<td>[[${e.version}]]</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

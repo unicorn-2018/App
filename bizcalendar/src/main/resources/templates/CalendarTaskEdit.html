@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+	<div class="card border-light" th:id ="task-card-body">
+		<form th:object="${event}" class="needs-validation" th:id="task-validation" novalidate>
+			<div class="text-right">
+				<button th:if="${event.id!=0}" type="button" class="btn btn-primary rounded-pill" th:id="taskUpdateButton">変更</button>
+				<button th:unless="${event.id!=0}" type="button" class="btn btn-primary rounded-pill" th:id="taskAddButton">追加</button>
+			</div>
+			<input th:id ="taskId" th:value="${event.id}" type ="hidden">
+			<input th:id ="taskVersion" th:value="${event.version}" type ="hidden">
+			<div class="form-row">
+				<div class="col-md-12"> タイトル
+					<input type="text" class="form-control" th:id="taskTitle" name="title" th:value="${event.title}" th:maxlength="30" required>
+					<div class="invalid-feedback" > タイトルを入力してください </div>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="col-md-12"> 期限日
+					<input type="text" class="form-control" th:id="taskKigenYmd" name="start" th:value="${#strings.substring(event.start,0,10)}" required>
+					<div class="invalid-feedback" > 期限日を入力してください </div>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="col-md-12"> コメント
+					<textarea class="form-control" th:id="taskContent" rows="3" wrap="soft" th:maxlength="300">[[${event.description}]]</textarea>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="col-md-6 mb-3"> 状況
+					<div class="dropdown dropdown-tree" id="status"></div>
+					<input th:id ="taskStatusId" th:value="${event.taskStatusId}" type ="hidden">
+				</div>
+				<div class="col-md-6 mb-3"> 種別
+					<div class="dropdown dropdown-tree" id="taskType"></div>
+					<input th:id ="taskTypeId" th:value="${event.eventTypeId}" type ="hidden">
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="card border-light" th:id ="task-card-confirm-body" th:object="${event}">
+		<div th:if="*{editAuthFlag}"  class="text-right">
+			<button type="button" class="btn btn-primary rounded-pill" th:id="taskEditButton">編集</button>
+			<button type="button" class="btn btn-primary rounded-pill" th:id="taskDeleteButton">削除</button>
+		</div>
+		<br>
+		<h6 class="card-subtitle mb-2">
+			<span th:text="*{#strings.substring(start,0,10)}"></span>
+		</h6>
+		<h4 class="card-title">
+			<span th:style="|color: *{eventTypeColor}|">●</span>
+			<span th:text="*{title}"></span>
+		</h4>
+		<p class="card-text">
+			<span th:text="*{description}"></span>
+		</p>
+		<p class="card-text">
+			状況：<span th:if="*{taskStatusName!=null}" th:text="*{taskStatusName}"></span>
+			      <span th:if="*{taskStatusName==null or taskStatusName==''}" th:text="未設定"></span>
+		</p>
+		<div th:if="*{taskKigenFlag}" class="alert alert-danger" role="alert">期限切れのタスクです</div>
+		<div th:if="*{!editAuthFlag}" class="alert alert-danger" role="alert">編集権限がありません</div>
+	</div>
+</body>
+</html>

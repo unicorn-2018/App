@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Bizcalendar</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<link th:href="@{/dist/css/fullcalendar.min.css}" rel="stylesheet">
+<link th:href="@{/dist/css/fullcalendar.print.min.css}" rel="stylesheet" media='print'>
+<link th:href="@{/dist/css/scheduler.min.css}" rel="stylesheet">
+<link th:href="@{/css/CalendarMain.css}" rel="stylesheet">
+<script th:src="@{/dist/js/jquery.min.js}"></script>
+<script th:src="@{/dist/js/moment.min.js}"></script>
+<script th:src="@{/dist/js/fullcalendar.min.js}"></script>
+<script th:src="@{/dist/js/scheduler.min.js}"></script>
+<script th:src="@{/js/common/Common.js}"></script>
+<script th:src="@{/js/common/Header.js}"></script>
+<script th:src="@{/js/CalendarMain.js}"></script>
+<script th:src="@{/js/CalendarEventEdit.js}"></script>
+<script th:src="@{/js/CalendarTaskList.js}"></script>
+<script th:src="@{/js/CalendarTaskEdit.js}"></script>
+</head>
+<body>
+<div th:replace="/common/Common.html::header"></div>
+<div th:replace="/common/Header.html"></div>
+<div class="overlay">
+	<div class="container-fluid">
+		<div id="calendar"></div>
+		<div id="calendar-modal" class="modal fade">
+			<div class="modal-dialog modal-dialog-scrollable modal-lg" role="dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">
+							<span aria-hidden="true">×</span>
+							<span class="sr-only">close</span>
+						</button>
+						<span id="modalTitle" class="modal-title"></span>
+					</div>
+					<div id="modalBody" class="modal-body"></div>
+					<div id="modalFooter" class="modal-footer"></div>
+			    </div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" th:inline="javascript">
+/*★★★★★★★★ グローバル変数 ★★★★★★★★*/
+/*<![CDATA[*/
+	var user = /*[[${user}]]*/
+    var groups = /*[[${groups}]]*/
+    var members = /*[[${members}]]*/
+    var eventTypes = /*[[${eventTypes}]]*/
+    var icons = /*[[${icons}]]*/
+    var taskStatus = /*[[${status}]]*/
+    var taskTypes = /*[[${taskTypes}]]*/
+/*]]>*/
+// 選択日付
+var selectDay = null;
+// フィルターメンバー
+var filterUserId = null
+// フィルターグループ
+var filterGroupId = null
+// フィルターフラグ
+var filterFlag = false
+</script>
+</body>
+</html>
