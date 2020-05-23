@@ -3,22 +3,26 @@ package jp.co.bizrefine.domain.model;
 /**
  * グループ
  */
-public class group {
+public class Group {
 
-	private int id;
+	// グループID
+	private int groupId;
 
+	// グループ名
 	private String groupName;
 
+	// グループ種類
 	private int groupType;
 
+	// グループ有効グラフ
 	private int groupValidF;
 
-	public int getId() {
-		return id;
+	public int getGroupId() {
+		return groupId;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setGroupId(int groupId) {
+		this.groupId = groupId;
 	}
 
 	public String getGroupName() {
@@ -44,4 +48,5 @@ public class group {
 	public void setGroupValidF(int groupValidF) {
 		this.groupValidF = groupValidF;
 	}
+
 }

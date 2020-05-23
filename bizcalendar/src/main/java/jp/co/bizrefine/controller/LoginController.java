@@ -1,35 +1,39 @@
 package jp.co.bizrefine.controller;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import jp.co.bizrefine.domain.model.Code;
+import jp.co.bizrefine.domain.model.Group;
 import jp.co.bizrefine.domain.model.User;
+import jp.co.bizrefine.domain.service.EventService;
 import jp.co.bizrefine.domain.service.UserService;
 
-@Controller
+@RestController
 public class LoginController {
 
 	@Autowired
 	UserService userService;
+	@Autowired
+	EventService eventService;
 
 	/**
-	 * 初期画面を展開する
+	 * ログイン画面を展開する
 	 *
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public ModelAndView toCalendartop() {
-
+	public ModelAndView toCalendarTop() {
 		ModelAndView mv = new ModelAndView();
-
-		mv.setViewName("Calendartop");
+		mv.setViewName("CalendarTop");
 		mv.addObject("user", new User());
 		LocalDate date = LocalDate.now();
 		String title = "Calendar　" + String.valueOf(date.getYear());
@@ -44,18 +48,42 @@ public class LoginController {
 	 */
 	@ResponseBody
 	@PostMapping(value = "/login")
-	public ModelAndView toCalendarmain(@ModelAttribute User user) throws Exception {
+	public ModelAndView toCalendarMain(@ModelAttribute User user) throws Exception {
 		ModelAndView mv = new ModelAndView();
-		//前処理から受け取ったUserクラスを認証する
-		User authedUser = userService.auth(user);
+
+		// 前処理から受け取ったUserクラスを認証する
+		User authedUser = userService.findAuth(user);
+		// メンバーの取得
+		List<User> members = userService.findMembers();
+		List<Group> groups = userService.findGroups();
+		// イベント種別（色コード）の取得
+		Code code = new Code();
+		code.setCodeId("E_001");
+		List<Code> eventTypes = eventService.findCodes(code);
+		// イベントアイコンの取得
+		code = new Code();
+		code.setCodeId("E_002");
+		List<Code> icons = eventService.findCodes(code);
+		// タスク状況の取得
+		code = new Code();
+		code.setCodeId("T_001");
+		List<Code> status = eventService.findCodes(code);
+		// タスク種別（色コード）の取得
+		code = new Code();
+		code.setCodeId("T_002");
+		List<Code> taskTypes = eventService.findCodes(code);
 
 		if (authedUser != null) {
-			// 認証成功時、遷移先を変更する
-			mv.setViewName("Calendarmain");
-			// 認証成功時、遷移先へ認証済みUserを渡す
+			mv.setViewName("CalendarMain");
 			mv.addObject("user", authedUser);
+			mv.addObject("members", members);
+			mv.addObject("groups", groups);
+			mv.addObject("eventTypes", eventTypes);
+			mv.addObject("icons", icons);
+			mv.addObject("status", status);
+			mv.addObject("taskTypes", taskTypes);
 		} else {
-			mv.setViewName("Calendartop");
+			mv.setViewName("CalendarTop");
 			LocalDate date = LocalDate.now();
 			String title = "Calendar　" + String.valueOf(date.getYear());
 			mv.addObject("title", title);
@@ -64,5 +92,4 @@ public class LoginController {
 
 		return mv;
 	}
-
 }

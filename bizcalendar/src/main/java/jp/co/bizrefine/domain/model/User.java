@@ -5,26 +5,31 @@ package jp.co.bizrefine.domain.model;
  */
 public class User {
 
+	// ユーザーID
 	private int userId;
 
-	private String name;
-
-	private String employeeNumber;
-
-	private String birtyday;
-
-	private int groupId1;
-
-	private int groupId2;
-
-	private int groupId3;
-
-	private int adminF;
-
+	// メールアドレス
 	private String userEmail;
 
+	// パスワード
 	private String userPass;
 
+	// 名前
+	private String name;
+
+	// 社員番号
+	private String employeeNumber;
+
+	// 誕生日
+	private String birtyday;
+
+	// グループID
+	private int groupId;
+
+	// 管理者フラグ
+	private int adminF;
+
+	// ユーザー有効フラグ
 	private int userVaildF;
 
 	public int getUserId() {
@@ -33,6 +38,22 @@ public class User {
 
 	public void setUserId(int userId) {
 		this.userId = userId;
+	}
+
+	public String getUserEmail() {
+		return userEmail;
+	}
+
+	public void setUserEmail(String userEmail) {
+		this.userEmail = userEmail;
+	}
+
+	public String getUserPass() {
+		return userPass;
+	}
+
+	public void setUserPass(String userPass) {
+		this.userPass = userPass;
 	}
 
 	public String getName() {
@@ -59,28 +80,12 @@ public class User {
 		this.birtyday = birtyday;
 	}
 
-	public int getGroupId1() {
-		return groupId1;
+	public int getGroupId() {
+		return groupId;
 	}
 
-	public void setGroupId1(int groupId1) {
-		this.groupId1 = groupId1;
-	}
-
-	public int getGroupId2() {
-		return groupId2;
-	}
-
-	public void setGroupId2(int groupId2) {
-		this.groupId2 = groupId2;
-	}
-
-	public int getGroupId3() {
-		return groupId3;
-	}
-
-	public void setGroupId3(int groupId3) {
-		this.groupId3 = groupId3;
+	public void setGroupId(int groupId) {
+		this.groupId = groupId;
 	}
 
 	public int getAdminF() {
@@ -89,22 +94,6 @@ public class User {
 
 	public void setAdminF(int adminF) {
 		this.adminF = adminF;
-	}
-
-	public String getUserEmail() {
-		return userEmail;
-	}
-
-	public void setUserEmail(String userEmail) {
-		this.userEmail = userEmail;
-	}
-
-	public String getUserPass() {
-		return userPass;
-	}
-
-	public void setUserPass(String userPass) {
-		this.userPass = userPass;
 	}
 
 	public int getUserVaildF() {

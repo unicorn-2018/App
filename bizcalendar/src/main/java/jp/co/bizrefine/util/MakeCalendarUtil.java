@@ -15,20 +15,18 @@ import jp.co.bizrefine.domain.model.Event;
 
 public class MakeCalendarUtil {
 
-	public static List<Event> getHoliDay(String date) throws AJDException {
-		List<Date> monthStartDate = getStartDate(date);
-		// 年月を設定
-		List<Month> month1 = new ArrayList<Month>();
-		for (Date date1 : monthStartDate) {
-			String stringStartDate = new SimpleDateFormat("yyyyMMdd").format(date1);
-			int year = Integer.parseInt(stringStartDate.substring(0, 4));
-			int month = Integer.parseInt(stringStartDate.substring(4, 6));
-			month1.add(new Month(year, month));
+	public static List<Event> getHoliDay(String targetYear) throws AJDException {
+		List<Date> dateList = getDateList(targetYear);
+		List<Month> monthList = new ArrayList<Month>();
+		for (Date date : dateList) {
+			String StringDate = new SimpleDateFormat("yyyyMMdd").format(date);
+			int year = Integer.parseInt(StringDate.substring(0, 4));
+			int month = Integer.parseInt(StringDate.substring(4, 6));
+			monthList.add(new Month(year, month));
 		}
 
 		List<Event> events = new ArrayList<Event>();
-		// 1ヶ月分を取得
-		for (Month month : month1) {
+		for (Month month : monthList) {
 			for (AJD ajd : month.getDays()) {
 				Event event = new Event();
 				int day = ajd.getDay();
@@ -38,10 +36,11 @@ public class MakeCalendarUtil {
 					offName = holiday.getName(ajd);
 					String offYmd = String.valueOf(month.getYear()) + "-" + String.format("%02d", month.getMonth())
 							+ "-" + String.format("%02d", day);
+
 					event.setTitle(offName);
 					event.setStart(offYmd);
-					event.setEventVaildF(0);
-					event.setName("祝日");
+					event.setAllDay(true);
+					event.setResourceId("1:0:0");
 					events.add(event);
 				}
 			}
@@ -49,24 +48,18 @@ public class MakeCalendarUtil {
 		return events;
 	}
 
-	public static List<Date> getStartDate(String startDate) {
-		Date date1 = getDateFormat("yyyyMMdd", startDate);
-		List<Date> date2 = new ArrayList<Date>();
+	public static List<Date> getDateList(String targetYear) {
+		Date date = getDateFormat("yyyyMMdd", targetYear + "0101");
+		List<Date> dateList = new ArrayList<Date>();
 
-		// Date型の日時をCalendar型に変換
-		Calendar calendar1 = Calendar.getInstance();
-		calendar1.setTime(date1);
-		Calendar calendar2 = Calendar.getInstance();
-		calendar2.setTime(date1);
+		while (dateList.size() < 12) {
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTime(date);
+			calendar.add(Calendar.MONTH, dateList.size() + 1);
+			dateList.add(calendar.getTime());
+		}
 
-		// 日時を加算する
-		calendar1.add(Calendar.MONTH, -1);
-		calendar2.add(Calendar.MONTH, 1);
-		// Calendar型の日時をDate型に戻す
-		date2.add(calendar1.getTime());
-		date2.add(calendar2.getTime());
-
-		return date2;
+		return dateList;
 	}
 
 	public static Date getDateFormat(String format, String date) {
@@ -78,6 +71,17 @@ public class MakeCalendarUtil {
 			e.printStackTrace();
 		}
 		return dateFormat;
+	}
+
+	public static Calendar getCalrndarFormat(String format, String date) {
+		SimpleDateFormat sdf = new SimpleDateFormat(format);
+		Calendar calendarFormat = Calendar.getInstance();
+		try {
+			calendarFormat.setTime(sdf.parse(date));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return calendarFormat;
 	}
 
 }

@@ -2,32 +2,146 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="jp.co.bizrefine.domain.mapper.EventMapper">
    <select id="findEvents" parameterType="jp.co.bizrefine.domain.model.Event" resultType="jp.co.bizrefine.domain.model.Event">
-      SELECT
-      	et.event_id         AS "id"
-       ,ut.name             AS "name"
-	   ,et.event_name       AS "title"
-	   ,et.event_start      AS "start"
-	   ,et.event_end        AS "end"
-	   ,et.description      AS "description"
-	   ,et.event_type_id    AS "className"
-	   ,et.event_status_id  AS "statusName"
-	   ,1                   AS "eventVaildF"
+     SELECT DISTINCT
+        rt1.event_id                               AS "id"
+	   ,et.event_name                              AS "title"
+	   ,et.event_start                             AS "start"
+	   ,et.event_end                               AS "end"
+	   ,et.description                             AS "description"
+	   ,et.allday_flag                             AS "allDay"
+	   ,et.edit_auth_id                            AS "editAuthId"
+	   ,CASE WHEN et.edit_auth_id = 1
+	              AND
+ 	              et.create_user_id != #{loginIdParam}
+	         THEN
+	              FALSE
+	         ELSE
+	              TRUE
+	    END                                        AS "editAuthFlag"
+	   ,et.task_flag                               AS "taskFlag"
+	   ,CASE WHEN et.task_flag = '1'
+	              AND
+ 	              DATEDIFF(et.event_start,
+ 	                       current_date) <![CDATA[ <= ]]> 1
+ 	              AND
+ 	              <!-- 3:完了、4:保留以外 -->
+	              et.task_status_id NOT IN ('3','4')
+	         THEN
+	              TRUE
+	         ELSE
+	              FALSE
+	    END                                        AS "taskKigenFlag"
+	   ,ct1.code                                   AS "eventIconId"
+	   ,ct1.naiyo_1                                AS "eventIconClass"
+	   ,rt1.child_resource_type_id                 AS "eventTypeId"
+	   ,ct2.naiyo_1                                AS "eventTypeColor"
+	   ,ct3.code                                   AS "taskStatusId"
+	   ,ct3.naiyo_1                                AS "taskStatusName"
+	   ,ut1.name                                   AS "createName"
+	   ,ut2.name                                   AS "updateName"
+       ,rt1.resource_id                            AS "resourceId"
+       ,rt2.building_id_param                      AS "buildingIdParam"
+       ,et.event_version                           AS "version"
       FROM
       	event_tb et
-      INNER JOIN user_tb ut ON
-	  	ut.user_id = et.user_id
-      	<where>
-      		<if test="id != 0">
-      			et.event_id = #{id}
-      		</if>
-      		<if test="userId != 0">
-      			and et.user_id = #{userId}
-      		</if>
-      		<if test="className != 0 and className != 4">
-      			and et.event_type_id = #{className}
-      		</if>
-	        	and et.event_vaild_f = 1
-	    </where>
+	  INNER JOIN
+	  (SELECT
+	      event_id                                 AS event_id
+	     ,building_type_id                         AS building_type_id
+	     ,building_id                              AS building_id
+	     ,child_resource_type_id                   AS child_resource_type_id
+	     ,parent_resource_type_id                  AS parent_resource_type_id
+		 ,CASE WHEN child_resource_type_id IS NULL
+		  THEN
+		  		CONCAT (building_type_id,':',
+		                building_id,':',
+		                parent_resource_type_id)
+		  ELSE
+		  		CONCAT (building_type_id,':',
+		                building_id,':',
+		                parent_resource_type_id,':',
+		                child_resource_type_id)
+		  END                                       AS resource_id
+	  FROM
+	  	resource_tb)                                AS rt1
+      ON
+	  	rt1.event_id                                = et.event_id
+	  LEFT JOIN
+	  (SELECT
+	      event_id AS event_id
+		 ,GROUP_CONCAT(CONCAT (building_type_id,':',
+		                       building_id))        AS building_id_param
+	  FROM
+	  	resource_tb
+      GROUP BY event_id)                            AS rt2
+      ON
+         et.event_id                                = rt2.event_id
+	  LEFT JOIN
+         user_tb                                    AS ut1
+      ON
+         et.create_user_id                          = ut1.user_id
+      LEFT JOIN
+         user_tb                                    AS ut2
+      ON
+         et.update_user_id                          = ut2.user_id
+      LEFT JOIN
+         code_tb                                    AS ct1
+      ON
+         ct1.code_id                                = 'E_002'
+      AND
+         ct1.code                                   =  et.event_icon_id
+      LEFT JOIN
+         code_tb                                    AS ct2
+      ON
+         ct2.code_id                                = (CASE WHEN rt1.child_resource_type_id IS NOT NULL and
+                                                                 rt1.parent_resource_type_id = 1 THEN 'E_001'
+	                                                        WHEN rt1.child_resource_type_id IS NOT NULL and
+	                                                             rt1.parent_resource_type_id = 2 THEN 'T_002'
+	                                                        ELSE 'A_002' END)
+      AND
+         ct2.code                                   = (CASE WHEN rt1.child_resource_type_id IS NOT NULL THEN rt1.child_resource_type_id
+	                                                        ELSE rt1.parent_resource_type_id END)
+      LEFT JOIN
+         code_tb                                    AS ct3
+      ON
+         ct3.code_id                                = 'T_001'
+      AND
+         ct3.code                                   = et.task_status_id
+      <where>
+	      <choose>
+	      	<!-- タスク一覧選択時 -->
+		    <when test="selectKubun == 1">
+		    	AND et.task_flag = '1'
+		    	AND rt1.building_type_id = '3' AND rt1.building_id = #{loginIdParam}
+		    </when>
+		    <!-- タスク一覧選択時以外 -->
+		    <otherwise>
+		    	OR rt1.building_type_id = '1'
+  			    <if test="groupIdParam != null">
+			    	OR (rt1.building_type_id = '2' AND rt1.building_id IN (${groupIdParam}))
+			    </if>
+ 			    <if test="userIdParam != null">
+			    	OR (rt1.building_type_id = '3' AND rt1.building_id IN (${userIdParam}))
+			    </if>
+			    <if test="start != null">
+			    	AND REPLACE(#{start}, '-', '') <![CDATA[ <= ]]>  LEFT(REPLACE(et.event_end, '-', ''), 8)
+			    </if>
+			    <if test="end != null">
+			    	AND LEFT(REPLACE(et.event_start, '-', ''), 8) <![CDATA[ <= ]]> REPLACE(#{end}, '-', '')
+			    </if>
+		    </otherwise>
+		  </choose>
+		  AND et.event_vaild_f = 1
+	  </where>
+	  ORDER BY et.event_id,et.event_start
+   </select>
+   <select id="findEvent" parameterType="int" resultType="jp.co.bizrefine.domain.model.Event">
+     SELECT
+        event_version AS "version"
+     FROM
+      	event_tb
+     WHERE
+     	event_id = #{id}
    </select>
    <insert id="saveEvent" useGeneratedKeys="true" keyProperty="id" parameterType="jp.co.bizrefine.domain.model.Event">
      INSERT INTO event_tb (
@@ -36,23 +150,49 @@
 	    ,event_start
 	    ,event_end
 	    ,description
-	    ,event_type_id
+	    ,event_icon_id
+	    ,allday_flag
+	    ,edit_auth_id
+	    ,task_flag
+	    ,task_status_id
+	    ,event_vaild_f
+	    ,event_version
+	    ,create_user_id
+	    ,update_user_id
      ) VALUES (
      	 #{id}
      	,#{title}
      	,#{start}
      	,#{end}
      	,#{description}
-     	,#{className}
+     	,#{eventIconId}
+     	,#{allDay}
+     	,#{editAuthId}
+     	,#{taskFlag}
+     	,#{taskStatusId}
+     	,#{eventVaildF}
+     	,#{version}
+     	,#{createUserId}
+     	,#{updateUserId}
      )
+	 <selectKey keyProperty="id" resultType="int" order="AFTER">
+	   select @@IDENTITY
+	 </selectKey>
    </insert>
    <update id="updateEvent" parameterType="jp.co.bizrefine.domain.model.Event">
      UPDATE event_tb set
-	     event_name  = #{title}
-	    ,event_start = #{start}
-	    ,event_end   = #{end}
-		,description = #{description}
-		,event_type_id = #{className}
+	     event_name     = #{title}
+	    ,event_start    = #{start}
+	    ,event_end      = #{end}
+	    ,description    = #{description}
+	    ,event_icon_id  = #{eventIconId}
+	    ,allday_flag    = #{allDay}
+	    ,edit_auth_id   = #{editAuthId}
+	    ,task_flag      = #{taskFlag}
+	    ,task_status_id = #{taskStatusId}
+	    ,event_vaild_f  = #{eventVaildF}
+		,event_version  = #{version}
+	    ,update_user_id = #{updateUserId}
      WHERE
      	event_id = #{id}
    </update>
@@ -61,37 +201,106 @@
      WHERE
      	event_id = #{id}
    </delete>
-   <select id="findResources" parameterType="jp.co.bizrefine.domain.model.Event" resultType="jp.co.bizrefine.domain.model.Resource">
+   <select id="findResources" resultType="jp.co.bizrefine.domain.model.Resource">
       SELECT DISTINCT
-      	CASE WHEN et.event_type_id = 1 THEN ett.event_type_name
-      	     WHEN et.event_type_id = 2 THEN gt.group_name
-      	     WHEN et.event_type_id = 3 THEN ut.name END AS "building"
-	   ,est.event_status_name                           AS "title"
-	   ,et.event_type_id                                AS "className"
-	   ,et.event_status_id                              AS "statusName"
-	   ,ett.event_type_color                            AS "eventColor"
-	   ,est.event_status_icon                           AS "statusIcon"
+        CASE WHEN ct1.code = '2' THEN gt.group_name
+             WHEN ct1.code = '3' THEN ut.name
+			 ELSE ct1.naiyo_1 END                     AS "building"
+       ,CONCAT (rt.building_type_id,':',
+                rt.building_id,':',
+                ct2.code)                             AS "id"
+	   ,ct2.naiyo_2                                   AS "title"
+	   ,ct2.naiyo_1                                   AS "eventColor"
 	  FROM
-	  	event_tb et
-	  INNER JOIN event_type_tb ett ON
-	  	et.event_type_id = ett.event_type_id
-	  INNER JOIN event_status_tb est ON
-	  	et.event_status_id = est.event_status_id
-	  INNER JOIN user_tb ut ON
-	  	ut.user_id = et.user_id
-	  INNER JOIN group_tb gt ON
-	  	gt.group_id = ut.group_id3
-      <where>
-      	<if test="id != 0">
-      		et.event_id = #{id}
-      	</if>
-      	<if test="userId != 0">
-      		and et.user_id = #{userId}
-      	</if>
-      	<if test="className != 0 and className != 4">
-      		and et.event_type_id = #{className}
-      	</if>
-	        and et.event_vaild_f = 1
-	   </where>
+	  	resource_tb rt
+	  INNER JOIN
+	  	event_tb                                      AS et
+	  ON
+	  	rt.event_id                                   = et.event_id
+	  LEFT JOIN
+	  	group_tb                                      AS gt
+	  ON
+	    rt.building_type_id                           = 2 AND
+	  	rt.building_id                                = gt.group_id
+	  LEFT JOIN
+	  	user_tb                                       AS ut
+	  ON
+	    rt.building_type_id                           = 3 AND
+	  	rt.building_id                                = ut.user_id
+	  INNER JOIN
+	   code_tb                                        AS ct1
+	  ON
+	    ct1.code_id                                   = 'A_001' AND
+	  	ct1.code                                      = rt.building_type_id
+	  INNER JOIN
+	   code_tb                                        AS ct2
+	  ON
+	    ct2.code_id                                   = 'A_002' AND
+	  	ct2.code                                      = rt.parent_resource_type_id
+      ORDER BY rt.building_type_id
    </select>
+   <select id="findChildResources" resultType="jp.co.bizrefine.domain.model.Resource">
+     SELECT DISTINCT
+        CONCAT (rt.building_type_id,':',
+                rt.building_id,':',
+                ct1.code,':',
+                ct2.code)              AS "id"
+	   ,ct2.naiyo_2                    AS "title"
+	   ,ct2.naiyo_1                    AS "eventColor"
+	  FROM
+	  	resource_tb rt
+	  INNER JOIN
+	  	event_tb                       AS et
+	  ON
+	  	rt.event_id                    = et.event_id
+	  INNER JOIN
+	    code_tb                        AS ct1
+	  ON
+	    ct1.code_id                    = 'A_002' AND
+	  	ct1.code                       = rt.parent_resource_type_id
+	  INNER JOIN
+	    code_tb                        AS ct2
+	  ON
+	    ct2.code_id                    = (CASE WHEN rt.parent_resource_type_id = 1 THEN 'E_001'
+	                                           WHEN rt.parent_resource_type_id = 2 THEN 'T_002' END) AND
+	  	ct2.code                       = rt.child_resource_type_id
+	  WHERE
+	    rt.child_resource_type_id IS NOT NULL
+      ORDER BY
+        rt.child_resource_type_id
+   </select>
+   <select id="findCodes" resultType="jp.co.bizrefine.domain.model.Code">
+   	 SELECT
+   	   code_id AS codeId
+	  ,code    AS code
+	  ,naiyo_1 AS naiyo1
+	  ,naiyo_2 AS naiyo2
+	 FROM
+	 	code_tb
+	 WHERE
+     	code_id = #{codeId}
+   </select>
+   <insert id="saveResource" parameterType="jp.co.bizrefine.domain.model.Resource">
+     INSERT INTO resource_tb (
+     	 event_id
+	    ,building_type_id
+	    ,building_id
+	    ,parent_resource_type_id
+	    ,child_resource_type_id
+     ) VALUES
+     <foreach collection="list" item="item" separator=",">
+	   (
+	     #{item.eventId}
+	    ,#{item.buildingTypeId}
+	    ,#{item.buildingId}
+	    ,#{item.parentResourceTypeId}
+	    ,#{item.childResourceTypeId}
+	   )
+     </foreach>
+   </insert>
+   <delete id="deleteResource" parameterType="int">
+     DELETE FROM resource_tb
+     WHERE
+     	event_id = #{id}
+   </delete>
 </mapper>

@@ -1,45 +1,108 @@
 package jp.co.bizrefine.domain.model;
 
+import java.util.List;
+
 /**
  * イベント
  */
 public class Event {
 
+	// イベントID
 	private int id;
 
-	private int userId;
-
-	private int groupId1;
-
-	private int groupId2;
-
-	private int groupId3;
-
+	// タイトル
 	private String title;
 
-	private String description;
-
+	// 開始日
 	private String start;
 
+	// 終了日
 	private String end;
 
+	// コメント
+	private String description;
+
+	// 終日フラグ
+	private boolean allDay;
+
+	// 編集権限ID
+	private String editAuthId;
+
+	// 編集権限フラグ
+	private boolean taskFlag;
+
+	// イベントアイコンID
+	private String eventIconId;
+
+	// イベントアイコンクラス
+	private String eventIconClass;
+
+	// イベントアイコン名称
+	private String eventIconName;
+
+	// イベント種別ID
+	private String eventTypeId;
+
+	// イベント種別色
+	private String eventTypeColor;
+
+	// イベント種別名称
+	private String eventTypeName;
+
+	// タスク状況ID
+	private String taskStatusId;
+
+	// タスク状況名称
+	private String taskStatusName;
+
+	// 作成者ID
+	private int createUserId;
+
+	// 作成者名
+	private String createName;
+
+	// 更新者ID
+	private int updateUserId;
+
+	// 更新者名
+	private String updateName;
+
+	// イベント有効フラグ
 	private int eventVaildF;
 
-	private int className;
+	// イベントバージョン
+	private int version;
 
-	private int statusName;
-
+	// リソースID
 	private String resourceId;
 
-	private String eventColor;
+	/** 取得条件 */
+	// ユーザーIDパラメータ
+	private String userIdParam;
 
-	private String statusIcon;
+	// グループIDパラメータ
+	private String groupIdParam;
 
-	private String name;
+	// ビルディングIDパラメータ
+	private String buildingIdParam;
 
-	private String eventType;
+	// ビルディングパラメータ
+	private String buildingParam;
 
-	private String eventStatus;
+	// タスク期限フラグ
+	private boolean taskKigenFlag;
+
+	// ログインIDパラメータ
+	private int loginIdParam;
+
+	// 選択区分
+	private int selectKubun;
+
+	// 編集権限フラグ
+	private boolean editAuthFlag;
+
+	// リソースリスト
+	private List<Resource> resources;
 
 	public int getId() {
 		return id;
@@ -47,14 +110,6 @@ public class Event {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public int getUserId() {
-		return userId;
-	}
-
-	public void setUserId(int userId) {
-		this.userId = userId;
 	}
 
 	public String getTitle() {
@@ -81,30 +136,6 @@ public class Event {
 		this.end = end;
 	}
 
-	public int getGroupId1() {
-		return groupId1;
-	}
-
-	public void setGroupId1(int groupId1) {
-		this.groupId1 = groupId1;
-	}
-
-	public int getGroupId2() {
-		return groupId2;
-	}
-
-	public void setGroupId2(int groupId2) {
-		this.groupId2 = groupId2;
-	}
-
-	public int getGroupId3() {
-		return groupId3;
-	}
-
-	public void setGroupId3(int groupId3) {
-		this.groupId3 = groupId3;
-	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -113,12 +144,124 @@ public class Event {
 		this.description = description;
 	}
 
-	public int getClassName() {
-		return className;
+	public boolean isAllDay() {
+		return allDay;
 	}
 
-	public void setClassName(int className) {
-		this.className = className;
+	public void setAllDay(boolean allDay) {
+		this.allDay = allDay;
+	}
+
+	public String getEditAuthId() {
+		return editAuthId;
+	}
+
+	public void setEditAuthId(String editAuthId) {
+		this.editAuthId = editAuthId;
+	}
+
+	public boolean isTaskFlag() {
+		return taskFlag;
+	}
+
+	public void setTaskFlag(boolean taskFlag) {
+		this.taskFlag = taskFlag;
+	}
+
+	public String getEventIconId() {
+		return eventIconId;
+	}
+
+	public void setEventIconId(String eventIconId) {
+		this.eventIconId = eventIconId;
+	}
+
+	public String getEventIconName() {
+		return eventIconName;
+	}
+
+	public void setEventIconName(String eventIconName) {
+		this.eventIconName = eventIconName;
+	}
+
+	public String getEventIconClass() {
+		return eventIconClass;
+	}
+
+	public void setEventIconClass(String eventIconClass) {
+		this.eventIconClass = eventIconClass;
+	}
+
+	public String getEventTypeId() {
+		return eventTypeId;
+	}
+
+	public void setEventTypeId(String eventTypeId) {
+		this.eventTypeId = eventTypeId;
+	}
+
+	public String getEventTypeName() {
+		return eventTypeName;
+	}
+
+	public void setEventTypeName(String eventTypeName) {
+		this.eventTypeName = eventTypeName;
+	}
+
+	public String getEventTypeColor() {
+		return eventTypeColor;
+	}
+
+	public void setEventTypeColor(String eventTypeColor) {
+		this.eventTypeColor = eventTypeColor;
+	}
+
+	public String getTaskStatusId() {
+		return taskStatusId;
+	}
+
+	public void setTaskStatusId(String taskStatusId) {
+		this.taskStatusId = taskStatusId;
+	}
+
+	public String getTaskStatusName() {
+		return taskStatusName;
+	}
+
+	public void setTaskStatusName(String taskStatusName) {
+		this.taskStatusName = taskStatusName;
+	}
+
+	public int getCreateUserId() {
+		return createUserId;
+	}
+
+	public void setCreateUserId(int createUserId) {
+		this.createUserId = createUserId;
+	}
+
+	public int getUpdateUserId() {
+		return updateUserId;
+	}
+
+	public void setUpdateUserId(int updateUserId) {
+		this.updateUserId = updateUserId;
+	}
+
+	public String getCreateName() {
+		return createName;
+	}
+
+	public void setCreateName(String createName) {
+		this.createName = createName;
+	}
+
+	public String getUpdateName() {
+		return updateName;
+	}
+
+	public void setUpdateName(String updateName) {
+		this.updateName = updateName;
 	}
 
 	public int getEventVaildF() {
@@ -129,6 +272,14 @@ public class Event {
 		this.eventVaildF = eventVaildF;
 	}
 
+	public int getVersion() {
+		return version;
+	}
+
+	public void setVersion(int version) {
+		this.version = version;
+	}
+
 	public String getResourceId() {
 		return resourceId;
 	}
@@ -137,51 +288,75 @@ public class Event {
 		this.resourceId = resourceId;
 	}
 
-	public int getStatusName() {
-		return statusName;
+	public String getUserIdParam() {
+		return userIdParam;
 	}
 
-	public void setStatusName(int statusName) {
-		this.statusName = statusName;
+	public void setUserIdParam(String userIdParam) {
+		this.userIdParam = userIdParam;
 	}
 
-	public String getEventColor() {
-		return eventColor;
+	public String getGroupIdParam() {
+		return groupIdParam;
 	}
 
-	public void setEventColor(String eventColor) {
-		this.eventColor = eventColor;
+	public void setGroupIdParam(String groupIdParam) {
+		this.groupIdParam = groupIdParam;
 	}
 
-	public String getStatusIcon() {
-		return statusIcon;
+	public String getBuildingIdParam() {
+		return buildingIdParam;
 	}
 
-	public void setStatusIcon(String statusIcon) {
-		this.statusIcon = statusIcon;
+	public void setBuildingIdParam(String buildingIdParam) {
+		this.buildingIdParam = buildingIdParam;
 	}
 
-	public String getName() {
-		return name;
+	public String getBuildingParam() {
+		return buildingParam;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setBuildingParam(String buildingParam) {
+		this.buildingParam = buildingParam;
 	}
 
-	public String getEventType() {
-		return eventType;
+	public boolean isTaskKigenFlag() {
+		return taskKigenFlag;
 	}
 
-	public void setEventType(String eventType) {
-		this.eventType = eventType;
+	public void setTaskKigenFlag(boolean taskKigenFlag) {
+		this.taskKigenFlag = taskKigenFlag;
 	}
 
-	public String getEventStatus() {
-		return eventStatus;
+	public int getLoginIdParam() {
+		return loginIdParam;
 	}
 
-	public void setEventStatus(String eventStatus) {
-		this.eventStatus = eventStatus;
+	public void setLoginIdParam(int loginIdParam) {
+		this.loginIdParam = loginIdParam;
+	}
+
+	public int getSelectKubun() {
+		return selectKubun;
+	}
+
+	public void setSelectKubun(int selectKubun) {
+		this.selectKubun = selectKubun;
+	}
+
+	public boolean isEditAuthFlag() {
+		return editAuthFlag;
+	}
+
+	public void setEditAuthFlag(boolean editAuthFlag) {
+		this.editAuthFlag = editAuthFlag;
+	}
+
+	public List<Resource> getResources() {
+		return resources;
+	}
+
+	public void setResources(List<Resource> resources) {
+		this.resources = resources;
 	}
 }

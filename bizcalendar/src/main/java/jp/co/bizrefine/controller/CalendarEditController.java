@@ -11,63 +11,69 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import jp.co.bizrefine.domain.model.Event;
+import jp.co.bizrefine.domain.model.Message;
 import jp.co.bizrefine.domain.model.Resource;
 import jp.co.bizrefine.domain.service.EventService;
 
 @RestController
 @RequestMapping(value = "/api")
-public class CalendarController {
+public class CalendarEditController {
 
 	@Autowired
 	EventService eventService;
 
 	/**
 	 * カレンダーのイベントを取得する
-	 *
+	 * @param event イベント
+	 * @return List<Event> イベントリスト
 	 */
 	@ResponseBody
 	@PostMapping(value = "/event", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public List<Event> getEvents(@RequestBody Event event) throws Exception {
+	public List<Event> findEvents(@RequestBody Event event) throws Exception {
 		return eventService.findEvents(event);
 	}
 
 	/**
 	 * カレンダーのリソースを取得する
-	 *
+	 * @param event イベント
+	 * @return List<Resource> リソースリスト
 	 */
 	@ResponseBody
 	@PostMapping(value = "/resource", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public List<Resource> getResources(@RequestBody Event event) throws Exception {
-		return eventService.findResources(event);
+	public List<Resource> findResources() throws Exception {
+		return eventService.findResources();
 	}
 
 	/**
 	 * カレンダーのイベントを更新する
-	 *
+	 * @param event イベント
+	 * @return Message メッセージ
 	 */
 	@ResponseBody
 	@PostMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public Event updateEvent(@RequestBody Event event) throws Exception {
+	public Message updateEvent(@RequestBody Event event) throws Exception {
 		return eventService.updateEvent(event);
 	}
 
 	/**
 	 * カレンダーのイベントを追加する
-	 *
+	 * @param event イベント
+	 * @return Message メッセージ
 	 */
 	@ResponseBody
 	@PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public Event saveEvent(@RequestBody Event event) throws Exception {
+	public Message saveEvent(@RequestBody Event event) throws Exception {
 		return eventService.saveEvent(event);
 	}
 
 	/**
 	 * カレンダーのイベントを削除する
-	 *
+	 * @param id イベントID
+	 * @return Message メッセージ
 	 */
 	@ResponseBody
 	@PostMapping(value = "/delete", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public void deleteEvent(@RequestBody String id) throws Exception {
-		eventService.deleteEvent(id);
+	public Message deleteEvent(@RequestBody String id) throws Exception {
+		return eventService.deleteEvent(id);
 	}
 }
