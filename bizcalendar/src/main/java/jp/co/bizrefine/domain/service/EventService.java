@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import ajd4jp.AJDException;
 import jp.co.bizrefine.domain.mapper.EventMapper;
+import jp.co.bizrefine.domain.mapper.UserMapper;
 import jp.co.bizrefine.domain.model.Code;
 import jp.co.bizrefine.domain.model.Event;
 import jp.co.bizrefine.domain.model.Message;
@@ -22,6 +23,8 @@ public class EventService {
 
 	@Autowired
 	EventMapper eventMapper;
+	@Autowired
+	UserMapper userMapper;
 
 	public static final class MessageNaiyo {
 		// タイトル
@@ -56,6 +59,8 @@ public class EventService {
 		if (1 != event.getSelectKubun()) {
 			List<Event> holiday = MakeCalendarUtil.getHoliDay(event.getStart().replace("-", "").substring(0, 4));
 			events.addAll(holiday);
+			List<Event> birthday = userMapper.findBirthday();
+			events.addAll(birthday);
 		}
 		return events;
 	}

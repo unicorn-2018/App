@@ -40,4 +40,16 @@
       WHERE
 	    gt.group_vaild_f = 1
    </select>
+   <select id="findBirthday" resultType="jp.co.bizrefine.domain.model.Event" >
+      SELECT
+          CONCAT(ut.name,'誕生日')   AS "title"
+         ,ut.birthday                AS "start"
+         ,TRUE                       AS "allDay"
+         ,'1:1:3'                    AS "resourceId"
+         ,'fa fa-gift'               AS "eventIconClass"
+      FROM
+      	user_tb ut
+      WHERE
+	    ut.user_vaild_f = 1
+   </select>
 </mapper>
