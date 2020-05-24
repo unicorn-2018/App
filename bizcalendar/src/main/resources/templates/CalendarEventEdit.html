@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+</head>
+<body>
+	<div class="card border-light" th:id ="event-card-body">
+		<form th:object="${event}" class="needs-validation" th:id="event-validation" novalidate>
+			<div class="text-right">
+				<div th:if="${event.id!=0}">
+					<button type="button" class="btn btn-primary rounded-pill" th:id="eventUpdateButton">変更</button>
+				</div>
+				<div th:unless="${event.id!=0}">
+					<button type="button" class="btn btn-primary rounded-pill" th:id="eventAddButton">追加</button>
+				</div>
+			</div>
+			<input th:id ="eventId" th:value="${event.id}" type ="hidden">
+			<input th:id ="eventVersion" th:value="${event.version}" type ="hidden">
+			<div class="form-row">
+				<div class="col-md-12"> タイトル
+					<input type="text" class="form-control" th:id="inputTitle" name="title" th:value="${event.title}" th:maxlength="30" required>
+					<div class="invalid-feedback" > タイトルを入力してください </div>
+				</div>
+			</div>
+			<div class="form-row">
+				 <div class="col-md-12">
+					<div class="custom-control custom-checkbox">
+						<input type="checkbox" class="custom-control-input" th:id="alldayCheck" name="allDay" th:checked="${event.allDay}" th:value="${event.allDay}">
+						<label class="custom-control-label" th:for="alldayCheck">終日</label>
+					</div>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="col-8"> 開始日
+					<input  th:if="${event.start!=null}"  type="text" class="form-control" th:id="inputYmdFrom" name="start" th:value="${#strings.substring(event.start,0,10)}" required>
+					<input th:unless="${event.start!=null}"  type="text" class="form-control" th:id="inputYmdFrom" required>
+					<div class="invalid-feedback"> 開始日を入力してください </div>
+				</div>
+				<div class="col-4"> 開始時間
+					<input th:if="${event.start!=null and #strings.length(event.start)>10 and !event.allDay}" type="time" class="form-control" th:id="inputHmFrom" th:value="${#strings.substring(event.start,11,16)}" th:disabled="${event.allDay}">
+					<input th:unless="${event.start!=null and #strings.length(event.start)>10 and !event.allDay}"  type="time" class="form-control" th:id="inputHmFrom" th:disabled="${event.allDay}">
+				</div>
+				<div class="col-8"> 終了日
+					<input th:if="${event.end!=null}" type="text" class="form-control" th:id="inputYmdTo" name="end" th:value="${#strings.substring(event.end,0,10)}">
+					<input th:unless="${event.end!=null}" type="text" class="form-control" th:id="inputYmdTo">
+				</div>
+				<div class="col-4"> 終了時間
+					<input th:if="${event.end!=null and #strings.length(event.end)>10 and !event.allDay}" type="time" class="form-control" th:id="inputHmTo" th:value="${#strings.substring(event.end,11,16)}" th:disabled="${event.allDay}">
+					<input th:unless="${event.end!=null and #strings.length(event.end)>10 and !event.allDay}" type="time" class="form-control" th:id="inputHmTo" th:disabled="${event.allDay}">
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="col-md-12"> コメント
+					<textarea class="form-control" th:id="inputContent" rows="3" wrap="soft" th:maxlength="300">[[${event.description}]]</textarea>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="col-md-6 mb-3">予定の共有<br>
+					<div class="dropdown dropdown-tree" id="share"></div>
+					<input th:id ="shareResource" th:value="${event.buildingIdParam}" type ="hidden">
+				</div>
+				<div class="col-md-6 mb-3">編集権限設定 <br>
+					<div class="btn-group btn-group-toggle" data-toggle="buttons">
+						<label th:classappend="${(event.editAuthId== '0' OR event.editAuthId== null ? 'btn btn-outline-secondary active' : 'btn btn-outline-secondary')}">
+						<input type="radio" name="editAuthId" th:checked="${event.editAuthId== '0' OR event.editAuthId== null}" th:value="${0}" >全ユーザー</label>
+						<label th:classappend="${(event.editAuthId== '1'? 'btn btn-outline-secondary active' : 'btn btn-outline-secondary')}">
+						<input type="radio" name="editAuthId" th:checked="${event.editAuthId== '1'}" th:value="1" >作成者のみ</label>
+					</div>
+					<input th:id ="editAuthId" th:value="${event.editAuthId}" type ="hidden">
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="col-md-6 mb-3">アイコン設定 <br>
+					<div class="dropdown dropdown-tree" id="icon"></div>
+					<input th:id ="eventIconId" th:value="${event.eventIconId}" type ="hidden">
+				</div>
+				<div class="col-md-6 mb-3">種別設定 <br>
+					<div class="dropdown dropdown-tree" id="eventType"></div>
+					<input th:id ="eventTypeId" th:value="${event.eventTypeId}" type ="hidden">
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="col-md-6 mb-3"><br/>
+					<small th:if="${event.createName!=null and event.updateName!=null}" class="text-muted">作成者：[[${event.createName}]]　更新者：[[${event.updateName}]]</small>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="card border-light"  th:id ="event-card-confirm-body" th:object="${event}">
+		<div th:if="*{editAuthFlag}" class="text-right">
+			<button type="button" class="btn btn-primary rounded-pill" th:id="eventEditButton">編集</button>
+			<button type="button" class="btn btn-primary rounded-pill" th:id="eventDeleteButton">削除</button>
+		</div>
+		<br>
+		<h6 class="card-subtitle mb-2">
+			<span th:if="*{start!=null}" th:text="*{#strings.substring(start,0,10)}"></span>
+			<span th:if="*{start!=null and #strings.length(start)>10 and !allDay}" th:text="*{#strings.substring(start,11,16)}"></span>
+			<span th:if="*{end!=null}">～</span>
+			<span th:if="*{end!=null}" th:text="*{#strings.substring(end,0,10)}"></span>
+			<span th:if="*{end!=null and #strings.length(end)>10 and !allDay}" th:text="*{#strings.substring(end,11,16)}"></span>
+		</h6>
+		<h4 class="card-title">
+			<span th:style="|color: *{eventTypeColor}|">●</span>
+			<span th:classappend="*{eventIconClass}"></span>
+			<span th:text="*{title}"></span>
+		</h4>
+		<p class="card-text">
+			<span th:text="*{description}"></span>
+		</p>
+		<p class="card-text">
+			<small class="text-muted">共有先：<span th:id ="shareResourceName"></span></small><br>
+			<small class="text-muted">編集権限：<span th:text="*{editAuthId== '0' ? '全ユーザー' : '作成者のみ'}"></span></small><br>
+			<small class="text-muted">作成者：<span th:text="*{createName}"></span>　更新者：<span th:text="*{updateName}"></span></small><br>
+		</p>
+		<div th:if="*{!editAuthFlag}" class="alert alert-danger" role="alert">編集権限がありません</div>
+	</div>
+</body>
+</html>
