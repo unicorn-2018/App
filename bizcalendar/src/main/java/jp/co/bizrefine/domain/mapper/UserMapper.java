@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import jp.co.bizrefine.domain.model.Event;
 import jp.co.bizrefine.domain.model.Group;
 import jp.co.bizrefine.domain.model.User;
 
@@ -13,6 +14,8 @@ public interface UserMapper {
 //	User findOne(int id);
 
 	User findAuth(User user);
+
+	List<Event> findBirthday();
 
 	List<User> findMembers();
 

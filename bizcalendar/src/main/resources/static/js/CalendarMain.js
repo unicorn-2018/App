@@ -80,10 +80,12 @@ $(function() {
 			// クライアントイベント
 			element.find('.fc-title').prepend('<span><i class="' + event.eventIconClass+ '"></i></span>');
 			element.find('.fc-list-item-title').prepend('<span><i class="' + event.eventIconClass+ '"></i></span>');
-			if (event.id == 0) {
+			// 祝日の場合、背景色をピンクにする
+			if (event.resourceId === '1:0:0') {
 				$('.fc-day[data-date="' + event.start.format('YYYY-MM-DD') + '"]').css('background', '#ffeaea');
 			}
-			if (event.id !== 0 && view.name !== "timelineYear") {
+			// 年表示以外の場合、枝番が付与されたイベントは表示しない
+			if (event.idParam !== 0 && view.name !== 'timelineYear') {
 				if (event.id !== event.idParam) {
 					return false;
 				}
@@ -95,7 +97,7 @@ $(function() {
 		},
 		// イベントクリック時に発動
 		eventClick: function(e, j, v) {
-			if (e.id !== 0 && v.name !== "month") {
+			if (e.idParam !== 0 && v.name !== 'month') {
 				var eventList = [];
 				eventList.push(e);
 				if (e.taskFlag) {
@@ -137,9 +139,12 @@ $(function() {
 	});
 	$('.overlay').on('click',function() {
 		if ($(this).hasClass('open')) {
-			$(this).removeClass('open');
-		    $('.menu-trigger').removeClass('active');
-		    $('nav').removeClass('open');
+			// モーダルが開いない場合、ヘッダーを閉じる
+			if (!document.getElementById('calendar-modal')) {
+				$(this).removeClass('open');
+				$('.menu-trigger').removeClass('active');
+				$('nav').removeClass('open');
+			}
 		}
 	});
 });
@@ -182,7 +187,7 @@ function setCalendarList(startDate, endDate, callback) {
 			var events = jQuery.parseJSON(data);
 			for (var i = 0; i < events.length; i++) {
 				// イベントIDが重複した場合、表示用にイベントIDに枝番をつける
-				if (events[i].id != 0 && tmpId == events[i].id) {
+				if (tmpId == events[i].id) {
 					events[i].idParam = events[i].id;
 					events[i].id = events[i].id + "-" + idCnt;
 					idCnt += 1;

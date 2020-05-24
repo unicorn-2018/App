@@ -22,7 +22,7 @@ function showEventEdit() {
 			if (icons[i].code == $('#eventIconId').val()) {
 				tmpIconTitle = iconTitle;
 			}
-		// 追加の場合または、変更時ステータスが未着手の場合
+		// 追加の場合または、変更時ステータスが未設定の場合
 		} else {
 			if (icons[i].code == 99) {
 				tmpIconTitle = icons[i].naiyo2;
@@ -66,7 +66,7 @@ function showEventEdit() {
 				tmpEventTypeTitle = typeTitle;
 				$('#eventTypeColor').val(eventTypes[i].naiyo2);
 			}
-		// 追加の場合または変更時ステータスが未着手の場合
+		// 追加の場合または変更時ステータスが未設定の場合
 		} else {
 			if (eventTypes[i].code == 99) {
 				tmpEventTypeTitle = typeTitle;
