@@ -57,15 +57,11 @@ public class EventService {
 		List<Event> events = eventMapper.findEvents(event);
 		// タスク一覧選択時以外の場合
 		if (1 != event.getSelectKubun()) {
-			String year = event.getStart().replace("-", "").substring(0, 4);
 			// 祝日の設定
-			List<Event> holiday = MakeCalendarUtil.getHoliDay(year);
+			List<Event> holiday = MakeCalendarUtil.getHoliDay(event.getStart().replace("-", "").substring(0, 4));
 			events.addAll(holiday);
 			// 誕生日の設定
-			List<Event> birthdays = userMapper.findBirthday();
-			for ( Event birthday : birthdays) {
-				birthday.setStart(year + "-" + birthday.getStart());
-			}
+			List<Event> birthdays = userMapper.findBirthday(event);
 			events.addAll(birthdays);
 		}
 		return events;
