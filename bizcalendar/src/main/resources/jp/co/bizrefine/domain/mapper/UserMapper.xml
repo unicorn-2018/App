@@ -40,13 +40,16 @@
       WHERE
 	    gt.group_vaild_f = 1
    </select>
-   <select id="findBirthday" resultType="jp.co.bizrefine.domain.model.Event" >
+   <select id="findBirthday" parameterType="jp.co.bizrefine.domain.model.Event" resultType="jp.co.bizrefine.domain.model.Event" >
       SELECT
-          CONCAT(ut.name,'誕生日')   AS "title"
-         ,ut.birthday                AS "start"
-         ,TRUE                       AS "allDay"
-         ,'1:1:3'                    AS "resourceId"
-         ,'fa fa-gift'               AS "eventIconClass"
+         CONCAT(ut.name,
+                '誕生日')                    AS "title"
+        ,CONCAT(SUBSTRING(#{start}
+                FROM 1 FOR 5),
+                SUBSTRING(ut.birthday,6))    AS "start"
+        ,TRUE                                AS "allDay"
+        ,'1:1:3'                             AS "resourceId"
+        ,'fa fa-gift'                        AS "eventIconClass"
       FROM
       	user_tb ut
       WHERE

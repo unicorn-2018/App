@@ -15,7 +15,7 @@ public interface UserMapper {
 
 	User findAuth(User user);
 
-	List<Event> findBirthday();
+	List<Event> findBirthday(Event event);
 
 	List<User> findMembers();
 
