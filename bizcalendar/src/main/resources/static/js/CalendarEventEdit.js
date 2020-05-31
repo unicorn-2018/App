@@ -24,7 +24,7 @@ function showEventEdit() {
 			}
 		// 追加の場合または、変更時ステータスが未設定の場合
 		} else {
-			if (icons[i].code == 99) {
+			if (icons[i].code == '99') {
 				tmpIconTitle = icons[i].naiyo2;
 			}
 		}
@@ -68,7 +68,7 @@ function showEventEdit() {
 			}
 		// 追加の場合または変更時ステータスが未設定の場合
 		} else {
-			if (eventTypes[i].code == 99) {
+			if (eventTypes[i].code == '99') {
 				tmpEventTypeTitle = typeTitle;
 			}
 		}
@@ -243,8 +243,8 @@ function showEventEdit() {
 		            ok: 'はい'
 		        },
 			})
-			.then((willDelete) => {
-				if (willDelete) {
+			.then(function(data) {
+				if (data) {
 					deleteEvent();
 				} else {
 				    swal('キャンセルされました');
@@ -363,12 +363,12 @@ function addEvent() {
 	}
 	// アイコン
 	var tmpIconId = null;
-	if ($('#eventIconId').val() != 99 && $('#eventIconId').val() != "") {
+	if ($('#eventIconId').val() != '99' && $('#eventIconId').val() != "") {
 		tmpIconId = $('#eventIconId').val();
 	}
 	// 種別
 	var tmpTypeId = null;
-	if ($('#eventTypeId').val() != 99 && $('#eventTypeId').val() != "") {
+	if ($('#eventTypeId').val() != '99' && $('#eventTypeId').val() != "") {
 		tmpTypeId = $('#eventTypeId').val();
 	}
 	// 共有先
@@ -472,12 +472,12 @@ function updateEvent() {
 	}
 	// アイコン
 	var tmpIconId = null;
-	if ($('#eventIconId').val() != 99 && $('#eventIconId').val() != "") {
+	if ($('#eventIconId').val() != '99' && $('#eventIconId').val() != "") {
 		tmpIconId = $('#eventIconId').val();
 	}
 	// 種別
 	var tmpTypeId = null;
-	if ($('#eventTypeId').val() != 99 && $('#eventTypeId').val() != "") {
+	if ($('#eventTypeId').val() != '99' && $('#eventTypeId').val() != "") {
 		tmpTypeId = $('#eventTypeId').val();
 	}
 	// 共有先取得
