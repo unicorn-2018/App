@@ -154,6 +154,16 @@ function showEventEdit() {
 			if ($('#inputHmFrom').val() !== "" && $('#inputHmFrom').val() > $('#inputHmTo').val()) {
 				$('#inputHmTo').val($('#inputHmFrom').val());
 			}
+		} else {
+			if ($('#inputYmdTo').val() == "" ) {
+				$('#inputHmTo').val($('#inputHmFrom').val());
+			}
+		}
+		if (!$('#inputYmdFrom').val().match(/^\d{4}\-\d{2}\-\d{2}$/)) {
+			$('#inputYmdFrom').val("");
+		}
+		if (!$('#inputYmdTo').val().match(/^\d{4}\-\d{2}\-\d{2}$/)) {
+			$('#inputYmdTo').val("");
 		}
 	});
 
@@ -337,7 +347,11 @@ function addEvent() {
 		$('#inputYmdTo').val($('#inputYmdFrom').val());
 	}
 	if ($('#inputHmTo').val() == "") {
-		tmpEnd = $('#inputYmdTo').val() + 'T' + '00:00';
+		if (!$('#inputHmFrom').val() == "") {
+			tmpEnd = $('#inputYmdTo').val() + 'T' + $('#inputHmFrom').val();
+		} else {
+			tmpEnd = $('#inputYmdTo').val() + 'T' + '00:00';
+		}
 	} else {
 		tmpEnd = $('#inputYmdTo').val() + 'T' + $('#inputHmTo').val();
 	}
@@ -374,7 +388,7 @@ function addEvent() {
 			buildingTypeId : 3,
 			buildingId : user.userId,
 			parentResourceTypeId : '1',
-			childResourceTypeId : $('#eventTypeId').val()
+			childResourceTypeId : null
 		});
 	}
 	var eventData = {
@@ -442,7 +456,11 @@ function updateEvent() {
 		$('#inputYmdTo').val($('#inputYmdFrom').val());
 	}
 	if ($('#inputHmTo').val() == "") {
-		tmpEnd = $('#inputYmdTo').val() + 'T' + '00:00';
+		if (!$('#inputHmFrom').val() == "") {
+			tmpEnd = $('#inputYmdTo').val() + 'T' + $('#inputHmFrom').val();
+		} else {
+			tmpEnd = $('#inputYmdTo').val() + 'T' + '00:00';
+		}
 	} else {
 		tmpEnd = $('#inputYmdTo').val() + 'T' + $('#inputHmTo').val();
 	}
@@ -475,6 +493,14 @@ function updateEvent() {
 				childResourceTypeId : tmpTypeId
 			});
 		}
+	} else {
+		resourceData.push({
+			eventId : $('#eventId').val(),
+			buildingTypeId : 3,
+			buildingId : user.userId,
+			parentResourceTypeId : '1',
+			childResourceTypeId : null
+		})
 	};
 	var eventData = {
 			id : $('#eventId').val(),
