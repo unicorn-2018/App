@@ -40,7 +40,7 @@ function showTaskEdit() {
 			}
 		// 追加の場合または変更時ステータスが未設定の場合
 		} else {
-			if (taskStatus[i].code == 99) {
+			if (taskStatus[i].code == '99') {
 				tmpStatusTitle = taskStatus[i].naiyo1;
 			}
 		}
@@ -81,7 +81,7 @@ function showTaskEdit() {
 			}
 		// 追加の場合または変更時ステータスが未設定の場合
 		} else {
-			if (taskTypes[i].code == 99) {
+			if (taskTypes[i].code == '99') {
 				taskTypeTitle = typeTitle;
 			}
 		}
@@ -143,12 +143,12 @@ function showTaskEdit() {
 		            ok: 'はい'
 		        },
 			})
-			.then((willDelete) => {
-				  if (willDelete) {
-					  deleteTask();
-				  } else {
-					  swal('キャンセルされました');
-				  }
+			.then(function(data) {
+				if (data) {
+					deleteTask();
+				} else {
+				    swal('キャンセルされました');
+				}
 			});
 		});
 
@@ -208,12 +208,12 @@ function deleteTask() {
 function addTask() {
 	// 状況
 	var tmpStatusId = null;
-	if ($('#taskStatusId').val() !== 99 && $('#taskStatusId').val() !== "") {
+	if ($('#taskStatusId').val() !== '99' && $('#taskStatusId').val() !== "") {
 		tmpStatusId = $('#taskStatusId').val();
 	}
 	// 種別
 	var tmpTypeId = null;
-	if ($('#taskTypeId').val() !== 99 && $('#taskTypeId').val() !== "") {
+	if ($('#taskTypeId').val() !== '99' && $('#taskTypeId').val() !== "") {
 		tmpTypeId = $('#taskTypeId').val();
 	}
 	// リソース設定
@@ -282,12 +282,12 @@ function addTask() {
 function updateTask() {
 	// 状況
 	var tmpStatusId = null;
-	if ($('#taskStatusId').val() != 99 && $('#taskStatusId').val() != "") {
+	if ($('#taskStatusId').val() != '99' && $('#taskStatusId').val() != "") {
 		tmpStatusId = $('#taskStatusId').val()
 	}
 	// 種別
 	var tmpTypeId = null;
-	if ($('#taskTypeId').val() != 99 && $('#taskTypeId').val() !== "") {
+	if ($('#taskTypeId').val() != '99' && $('#taskTypeId').val() !== "") {
 		tmpTypeId = $('#taskTypeId').val();
 	}
 	// リソース設定

@@ -24,7 +24,7 @@ function showEventEdit() {
 			}
 		// 追加の場合または、変更時ステータスが未設定の場合
 		} else {
-			if (icons[i].code == 99) {
+			if (icons[i].code == '99') {
 				tmpIconTitle = icons[i].naiyo2;
 			}
 		}
@@ -68,7 +68,7 @@ function showEventEdit() {
 			}
 		// 追加の場合または変更時ステータスが未設定の場合
 		} else {
-			if (eventTypes[i].code == 99) {
+			if (eventTypes[i].code == '99') {
 				tmpEventTypeTitle = typeTitle;
 			}
 		}
@@ -154,6 +154,16 @@ function showEventEdit() {
 			if ($('#inputHmFrom').val() !== "" && $('#inputHmFrom').val() > $('#inputHmTo').val()) {
 				$('#inputHmTo').val($('#inputHmFrom').val());
 			}
+		} else {
+			if ($('#inputYmdTo').val() == "" ) {
+				$('#inputHmTo').val($('#inputHmFrom').val());
+			}
+		}
+		if (!$('#inputYmdFrom').val().match(/^\d{4}\-\d{2}\-\d{2}$/)) {
+			$('#inputYmdFrom').val("");
+		}
+		if (!$('#inputYmdTo').val().match(/^\d{4}\-\d{2}\-\d{2}$/)) {
+			$('#inputYmdTo').val("");
 		}
 	});
 
@@ -233,8 +243,8 @@ function showEventEdit() {
 		            ok: 'はい'
 		        },
 			})
-			.then((willDelete) => {
-				if (willDelete) {
+			.then(function(data) {
+				if (data) {
 					deleteEvent();
 				} else {
 				    swal('キャンセルされました');
@@ -337,7 +347,11 @@ function addEvent() {
 		$('#inputYmdTo').val($('#inputYmdFrom').val());
 	}
 	if ($('#inputHmTo').val() == "") {
-		tmpEnd = $('#inputYmdTo').val() + 'T' + '00:00';
+		if (!$('#inputHmFrom').val() == "") {
+			tmpEnd = $('#inputYmdTo').val() + 'T' + $('#inputHmFrom').val();
+		} else {
+			tmpEnd = $('#inputYmdTo').val() + 'T' + '00:00';
+		}
 	} else {
 		tmpEnd = $('#inputYmdTo').val() + 'T' + $('#inputHmTo').val();
 	}
@@ -349,12 +363,12 @@ function addEvent() {
 	}
 	// アイコン
 	var tmpIconId = null;
-	if ($('#eventIconId').val() != 99 && $('#eventIconId').val() != "") {
+	if ($('#eventIconId').val() != '99' && $('#eventIconId').val() != "") {
 		tmpIconId = $('#eventIconId').val();
 	}
 	// 種別
 	var tmpTypeId = null;
-	if ($('#eventTypeId').val() != 99 && $('#eventTypeId').val() != "") {
+	if ($('#eventTypeId').val() != '99' && $('#eventTypeId').val() != "") {
 		tmpTypeId = $('#eventTypeId').val();
 	}
 	// 共有先
@@ -374,7 +388,7 @@ function addEvent() {
 			buildingTypeId : 3,
 			buildingId : user.userId,
 			parentResourceTypeId : '1',
-			childResourceTypeId : $('#eventTypeId').val()
+			childResourceTypeId : null
 		});
 	}
 	var eventData = {
@@ -442,7 +456,11 @@ function updateEvent() {
 		$('#inputYmdTo').val($('#inputYmdFrom').val());
 	}
 	if ($('#inputHmTo').val() == "") {
-		tmpEnd = $('#inputYmdTo').val() + 'T' + '00:00';
+		if (!$('#inputHmFrom').val() == "") {
+			tmpEnd = $('#inputYmdTo').val() + 'T' + $('#inputHmFrom').val();
+		} else {
+			tmpEnd = $('#inputYmdTo').val() + 'T' + '00:00';
+		}
 	} else {
 		tmpEnd = $('#inputYmdTo').val() + 'T' + $('#inputHmTo').val();
 	}
@@ -454,12 +472,12 @@ function updateEvent() {
 	}
 	// アイコン
 	var tmpIconId = null;
-	if ($('#eventIconId').val() != 99 && $('#eventIconId').val() != "") {
+	if ($('#eventIconId').val() != '99' && $('#eventIconId').val() != "") {
 		tmpIconId = $('#eventIconId').val();
 	}
 	// 種別
 	var tmpTypeId = null;
-	if ($('#eventTypeId').val() != 99 && $('#eventTypeId').val() != "") {
+	if ($('#eventTypeId').val() != '99' && $('#eventTypeId').val() != "") {
 		tmpTypeId = $('#eventTypeId').val();
 	}
 	// 共有先取得
@@ -475,6 +493,14 @@ function updateEvent() {
 				childResourceTypeId : tmpTypeId
 			});
 		}
+	} else {
+		resourceData.push({
+			eventId : $('#eventId').val(),
+			buildingTypeId : 3,
+			buildingId : user.userId,
+			parentResourceTypeId : '1',
+			childResourceTypeId : null
+		})
 	};
 	var eventData = {
 			id : $('#eventId').val(),
