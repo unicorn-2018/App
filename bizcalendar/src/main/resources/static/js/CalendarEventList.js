@@ -55,7 +55,7 @@ $('#event-table tbody').on('click', 'td.details-control', function () {
 		});
 		$.ajax({
 			type : 'post',
-			url : '/eventedit',
+			url : '/api/eventedit',
 			cache : false,
 			async : true,
 			dataType : 'text',

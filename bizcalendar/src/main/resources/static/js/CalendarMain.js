@@ -102,10 +102,10 @@ $(function() {
 				eventList.push(e);
 				if (e.taskFlag) {
 					// タスク編集画面を表示
-					showModal(eventList, '/taskedit');
+					showModal(eventList, '/api/taskedit');
 				} else {
 					// イベント編集画面を表示
-					showModal(eventList, '/eventedit');
+					showModal(eventList, '/api/eventedit');
 				}
 			}
 		},

@@ -46,7 +46,7 @@ function showTaskList() {
 			});
 			$.ajax({
 				type : 'post',
-				url : '/taskedit',
+				url : '/api/taskedit',
 				cache : false,
 				async : true,
 				dataType : 'text',
