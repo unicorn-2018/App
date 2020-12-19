@@ -39,6 +39,7 @@ public class AbstractExceptionResolver implements HandlerExceptionResolver {
 			mv.addObject("message", "null");
 			mv.setViewName("Error");
 		} else {
+			mv.addObject("message", ex.getMessage());
 			mv.setViewName("Error");
 		}
 
