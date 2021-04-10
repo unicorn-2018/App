@@ -87,7 +87,7 @@ $(function() {
 			endParam:selectDay
 		});
 		// スケジュール編集画面を表示
-		showModal(eventList, '/edit');
+		showModal(eventList, '/api/edit');
 	});
 
 	// タスク一覧ボタンクリック時に発動
@@ -98,7 +98,7 @@ $(function() {
 			selectKubun : 1
 		});
 		// タスク編集画面を表示
-		showModal(eventList, '/tasklist');
+		showModal(eventList, '/api/tasklist');
 	});
 });
 
