@@ -133,7 +133,7 @@
 		  </choose>
 		  AND et.event_vaild_f = 1
 	  </where>
-	  ORDER BY et.event_id,et.event_start
+	  ORDER BY start
    </select>
    <select id="findEvent" parameterType="int" resultType="jp.co.bizrefine.domain.model.Event">
      SELECT
@@ -237,7 +237,7 @@
 	  ON
 	    ct2.code_id                                   = 'A_002' AND
 	  	ct2.code                                      = rt.parent_resource_type_id
-      ORDER BY rt.building_type_id
+      ORDER BY id
    </select>
    <select id="findChildResources" resultType="jp.co.bizrefine.domain.model.Resource">
      SELECT DISTINCT
@@ -267,7 +267,7 @@
 	  WHERE
 	    rt.child_resource_type_id IS NOT NULL
       ORDER BY
-        rt.child_resource_type_id
+        id
    </select>
    <select id="findCodes" resultType="jp.co.bizrefine.domain.model.Code">
    	 SELECT
