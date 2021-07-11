@@ -35,10 +35,10 @@ public class LoginController {
 	 * code_tbからnaiyoを取得するためのキー TODO 定数クラスに追加する(定数クラスではprivate削除)
 	 */
 	private interface CODE_KEY {
-		// コード種別 URI
-		String URI = "uri";
 		// 接続先 AXIS
 		String AXIS = "axis";
+		// コード種別 シークレットキー
+		String SECRET_KEY = "secretKey";
 	}
 
 	/*
@@ -73,11 +73,11 @@ public class LoginController {
 	 */
 	@ResponseBody
 	@PostMapping(value = "/login")
-	public ModelAndView toCalendarMain(@CookieValue("auth") String reqToken) throws Exception {
+	public ModelAndView toCalendarMain(@CookieValue(name = "auth", required = false) String reqToken) throws Exception {
 
 		// シークレットキー取得
-		List<Code> listSecretKey = this.findCode(CODE_KEY.URI, CODE_KEY.AXIS);
-		if (null == listSecretKey || null == listSecretKey.get(0)) return null;
+		List<Code> listSecretKey = this.findCode(CODE_KEY.AXIS, CODE_KEY.SECRET_KEY);
+		if (null == listSecretKey) return null;
 
 		// トークンからユーザ情報取得
 		User verifiedUser = this.getUserFromToken(reqToken, listSecretKey.get(0).getNaiyo1());
