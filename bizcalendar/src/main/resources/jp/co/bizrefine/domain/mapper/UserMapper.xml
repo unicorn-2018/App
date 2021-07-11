@@ -17,8 +17,8 @@
       FROM
       	user_tb ut
       WHERE
-      	user_email = #{userEmail} AND
-	    user_pass = #{userPass} AND
+      	user_id = #{userId} AND
+	    name = #{name} AND
 	    user_vaild_f = 1
    </select>
    <select id="findMembers" resultType="jp.co.bizrefine.domain.model.User" >
