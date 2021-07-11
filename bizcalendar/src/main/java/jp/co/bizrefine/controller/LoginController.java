@@ -128,7 +128,7 @@ public class LoginController {
 		return mv;
 	}
 
-	private User getUserFromToken(String token, String secretKey) {
+	private User getUserFromToken(final String token, final String secretKey) {
 		// トークンの検証
 		JwtAuthProviderUtil.verifyRequestToken(token, secretKey);
 
@@ -146,7 +146,7 @@ public class LoginController {
 	/*
 	 * code_tbから情報取得 TODO コンポーネントクラスを作成して移行する
 	 */
-	private List<Code> findCode(String codeId, String codeKey) throws JsonParseException, JsonMappingException {
+	private List<Code> findCode(final String codeId, final String codeKey) throws JsonParseException, JsonMappingException {
 
 		Code inCode = new Code();
 		inCode.setCodeId(codeId);
@@ -154,7 +154,7 @@ public class LoginController {
 		List<Code> outListCode = eventService.findCodes(inCode);
 
 		// code_tbからの取得結果が無い場合はnull返却
-		if (null == outListCode) return null;
+		if (null == outListCode || outListCode.isEmpty() || null == outListCode.get(0)) return null;
 		return outListCode;
 	}
 }
