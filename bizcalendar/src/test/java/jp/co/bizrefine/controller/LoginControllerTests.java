@@ -37,11 +37,11 @@ public class LoginControllerTests {
 	public void testToCalendarMain() {
 		final String testMethodName = "testToCalendarMain";
 
-		// x期待値
+		// 期待値
 		final int expectedId = 0;
 		final String expectedName = "";
 
-		// xパラメータ設定
+		// パラメータ設定
 		final String testToken = "";
 
 		System.out.println("■ ■ ■ start:" + testMethodName + " ■ ■ ■");
