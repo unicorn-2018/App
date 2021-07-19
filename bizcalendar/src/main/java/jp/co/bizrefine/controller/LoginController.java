@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -72,7 +72,7 @@ public class LoginController {
 	 *
 	 */
 	@ResponseBody
-	@PostMapping(value = "/login")
+	@GetMapping(value = "/login")
 	public ModelAndView toCalendarMain(@CookieValue(name = "auth", required = false) String reqToken) throws Exception {
 
 		// シークレットキー取得
